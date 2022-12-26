@@ -23,11 +23,14 @@ RUN cmake -DBUILD_TESTS=OFF -G Ninja . \
 FROM rust:1-slim-buster as build-rust
 
 RUN apt-get update \
-    && apt-get install -y ca-certificates openssl libssl-dev curl pkg-config \
+    && apt-get install -y ca-certificates openssl libssl-dev curl git pkg-config \
     && rustup target add wasm32-unknown-unknown \
     && curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh \
-    && cargo install wasm-bindgen-cli
+    && cargo install --version "0.2.83" wasm-bindgen-cli \
+    && cargo install --version "0.8.3" cargo-cache \
+    && cargo cache -e \
+    && apt-get remove -y --auto-remove curl git \
+    && rm -rf /var/lib/apt/lists/*;
 
 COPY --from=build-binaryen /build/binaryen-version_111/bin/* /usr/local/bin/
 COPY --from=build-binaryen /build/binaryen-version_111/lib/* /usr/local/lib/
-
