@@ -1,3 +1,6 @@
+# generate image:
+# docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag jarjoura/rust-wasm:buster-slim .
+
 # STAGE 1: binaryen
 
 FROM debian:buster-slim as build-binaryen
@@ -20,9 +23,10 @@ RUN cmake -DBUILD_TESTS=OFF -G Ninja . \
 FROM rust:1-slim-buster as build-rust
 
 RUN apt-get update \
-    && apt-get install -y ca-certificates openssl libssl-dev curl \
+    && apt-get install -y ca-certificates openssl libssl-dev curl pkg-config \
     && rustup target add wasm32-unknown-unknown \
-    && curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh 
+    && curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh \
+    && cargo install wasm-bindgen-cli
 
 COPY --from=build-binaryen /build/binaryen-version_111/bin/* /usr/local/bin/
 COPY --from=build-binaryen /build/binaryen-version_111/lib/* /usr/local/lib/
