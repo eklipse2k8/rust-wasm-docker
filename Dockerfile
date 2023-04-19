@@ -43,6 +43,7 @@ RUN set -eux; \
     && rustup target add wasm32-unknown-unknown \
     && curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh \
     && cargo install -f wasm-bindgen-cli \
+    && cargo install --force -F sys-openssl --no-default-features --git="https://github.com/rustwasm/wasm-pack#48177dc0" \
     && cargo install -f cargo-cache \
     && cargo install -f sqlx-cli \
     && cargo cache -e \
