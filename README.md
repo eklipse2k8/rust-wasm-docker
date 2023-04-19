@@ -7,5 +7,5 @@ It has both the native toolchain and the wasm32-unknown-unknown toolchain instal
 ## Usage
 
 ```bash
-docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag eklipse2k8/rust-wasm:bullseye-slim .
+docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/eklipse2k8/rust-wasm:bullseye-slim .
 ```
