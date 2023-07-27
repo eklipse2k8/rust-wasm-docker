@@ -7,10 +7,10 @@ RUN apt-get update \
 
 WORKDIR /build
 
-RUN curl -s --http2 -L -O https://github.com/WebAssembly/binaryen/archive/refs/tags/version_112.tar.gz \
-    && tar -zxf version_112.tar.gz
+RUN curl -s --http2 -L -O https://github.com/WebAssembly/binaryen/archive/refs/tags/version_114.tar.gz \
+    && tar -zxf version_114.tar.gz
 
-WORKDIR /build/binaryen-version_112
+WORKDIR /build/binaryen-version_114
 
 RUN cmake -DBUILD_TESTS=OFF -G Ninja . \
     && ninja
@@ -43,12 +43,12 @@ RUN set -eux; \
     && rustup target add wasm32-unknown-unknown \
     && curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh \
     && cargo install -f wasm-bindgen-cli \
-    && cargo install --force -F sys-openssl --no-default-features --git="https://github.com/rustwasm/wasm-pack#48177dc0" \
+    && cargo install -f wasm-pack \
     && cargo install -f cargo-cache \
     && cargo install -f sqlx-cli \
     && cargo cache -e \
     && apt-get remove -y --auto-remove curl git gnupg \
     && rm -rf /var/lib/apt/lists/*;
 
-COPY --from=build-binaryen /build/binaryen-version_112/bin/* /usr/local/bin/
-COPY --from=build-binaryen /build/binaryen-version_112/lib/* /usr/local/lib/
+COPY --from=build-binaryen /build/binaryen-version_114/bin/* /usr/local/bin/
+COPY --from=build-binaryen /build/binaryen-version_114/lib/* /usr/local/lib/
