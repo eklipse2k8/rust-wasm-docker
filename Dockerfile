@@ -7,10 +7,10 @@ RUN apt-get update \
 
 WORKDIR /build
 
-RUN curl -s --http2 -L -O https://github.com/WebAssembly/binaryen/archive/refs/tags/version_114.tar.gz \
-    && tar -zxf version_114.tar.gz
+RUN curl -s --http2 -L -O https://github.com/WebAssembly/binaryen/archive/refs/tags/version_116.tar.gz \
+    && tar -zxf version_116.tar.gz
 
-WORKDIR /build/binaryen-version_114
+WORKDIR /build/binaryen-version_116
 
 RUN cmake -DBUILD_TESTS=OFF -G Ninja . \
     && ninja
@@ -32,8 +32,8 @@ RUN set -eux; \
     && sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
     && curl -sL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | tee /usr/share/keyrings/nodesource.gpg >/dev/null \
     && curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null \
-    && echo 'deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_19.x bullseye main' > /etc/apt/sources.list.d/nodesource.list \
-    && echo 'deb-src [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_19.x bullseye main' >> /etc/apt/sources.list.d/nodesource.list \
+    && echo 'deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x bullseye main' > /etc/apt/sources.list.d/nodesource.list \
+    && echo 'deb-src [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x bullseye main' >> /etc/apt/sources.list.d/nodesource.list \
     && echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list \
     && apt-get update \
     && locale-gen \
@@ -50,5 +50,5 @@ RUN set -eux; \
     && apt-get remove -y --auto-remove curl git gnupg \
     && rm -rf /var/lib/apt/lists/*;
 
-COPY --from=build-binaryen /build/binaryen-version_114/bin/* /usr/local/bin/
-COPY --from=build-binaryen /build/binaryen-version_114/lib/* /usr/local/lib/
+COPY --from=build-binaryen /build/binaryen-version_116/bin/* /usr/local/bin/
+COPY --from=build-binaryen /build/binaryen-version_116/lib/* /usr/local/lib/
